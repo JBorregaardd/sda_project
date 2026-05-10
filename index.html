@@ -34,9 +34,9 @@
         }
 
         main {
-            max-width: 900px;
+            max-width: 1200px; /* increased width */
             margin: 2rem auto;
-            padding: 0 1rem;
+            padding: 0 2rem; /* wider padding */
         }
 
         section {
@@ -71,6 +71,19 @@
             padding-left: 1rem;
             border-left: 4px solid #ff6f61;
         }
+
+        /* Flex container for municipal plots */
+        #municipal-level .flex-container {
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        #municipal-level .flex-container > div {
+            flex: 1;
+            min-width: 400px; /* slightly bigger than before */
+        }
+
     </style>
 </head>
 <body>
@@ -95,16 +108,17 @@
 
         <p class="quote">The time-series above shows that the housing market becoming less accessible is not just a feeling, but reflects a real trend. It tells a compelling story of the increasing gap between average housing prices and average incomes over the last 34 years. You can also clearly see the impact of the financial crisis: housing prices skyrocketed leading up to the 2008 boom, while incomes remained relatively stable during the same period. This visualization highlights both the long-term trend and the specific moments when the market experienced dramatic changes.</p>
     </section>
-        <section id="municipal-level">
+
+    <section id="municipal-level">
         <h2>From National Trends to Municipal Insights</h2>
         <p>This section explores how housing prices and affordability have evolved across individual municipalities, highlighting the extremes and differences between regions. The visualizations below show both the highest and lowest changes in square meter prices, as well as the impact on affordable living space for a standard 100 m² home.</p>
 
-        <div style="display: flex; gap: 2rem; flex-wrap: wrap;">
-            <div style="flex: 1; min-width: 300px;">
+        <div class="flex-container">
+            <div>
                 <img src="output/price_change_top_bottom.png" alt="Top and bottom municipalities by % price increase" class="plot">
                 <p class="quote">[Insert analysis and commentary on top and bottom municipalities by % price increase here]</p>
             </div>
-            <div style="flex: 1; min-width: 300px;">
+            <div>
                 <img src="output/sqm_change_top_bottom.png" alt="Change in affordable square meters for 100 m²" class="plot">
                 <p class="quote">[Insert analysis and commentary on changes in affordable square meters here]</p>
             </div>
@@ -115,9 +129,9 @@
         <h2>References</h2>
         <ol>
             <li>DR. (2025). <i>Danskerne skal til kommunalvalg: Se hvilke emner vælgerne går mest op i.</i> <a href="https://www.dr.dk/nyheder/politik/kommunalvalg/danskerne-skal-til-kommunalvalg-se-hvilke-emner-vaelgerne-gaar-mest-op-i" target="_blank">Link</a></li>
-            <li>Statistics Denmark (Danmarks Statistik). (2025). <i>20331: Kvadratmeterpris for ejerlejligheder</i>. Accessed May 10, 2026, from <a href="https://www.statistikbanken.dk/20331" target="_blank">https://www.statistikbanken.dk/20331</a></li>
-            <li>Statistics Denmark (Danmarks Statistik). (2025). <i>20326: Kvadratmeterpris for enfamiliehuse</i>. Accessed May 10, 2026, from <a href="https://www.statistikbanken.dk/20326" target="_blank">https://www.statistikbanken.dk/20326</a></li>
-            <li>Statistics Denmark (Danmarks Statistik). (2025). <i>BM010: Huspriser og omkostninger ved boligkøb</i>. Accessed May 10, 2026, from <a href="https://rkr.statistikbank.dk/BM010" target="_blank">https://rkr.statistikbank.dk/BM010</a></li>
+            <li>Statistics Denmark (Danmarks Statistik). (2025). <i>20331: Kvadratmeterpris for ejerlejligheder</i>. Accessed May 10, 2026, from <a href="https://www.statistikbanken.dk/20331" target="_blank">Link</a></li>
+            <li>Statistics Denmark (Danmarks Statistik). (2025). <i>20326: Kvadratmeterpris for enfamiliehuse</i>. Accessed May 10, 2026, from <a href="https://www.statistikbanken.dk/20326" target="_blank">Link</a></li>
+            <li>Statistics Denmark (Danmarks Statistik). (2025). <i>BM010: Huspriser og omkostninger ved boligkøb</i>. Accessed May 10, 2026, from <a href="https://rkr.statistikbank.dk/BM010" target="_blank">Link</a></li>
         </ol>
     </section>
 
