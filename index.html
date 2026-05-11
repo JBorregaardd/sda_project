@@ -324,7 +324,11 @@
 
             <div class="chart-container">
                 <div style="font-size: 0.85rem; font-weight: bold; margin-bottom: 10px;">Indexed change since 1992 (1992 = 100)</div>
-                <canvas id="explorerChart" height="250"></canvas>
+                
+                <div style="position: relative; height: 300px; width: 100%;">
+                    <canvas id="explorerChart"></canvas>
+                </div>
+
             </div>
 
             <div class="kpi-container">
@@ -362,6 +366,118 @@
 </main>
 
 
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    let chartInstance = null;
+    let muniData = {};
 
+    // 1. Hent JSON-filen (Bemærk: './' gør den klar til Github Pages)
+    fetch('output/municipal_data.json')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("Kunne ikke finde municipal_data.json");
+            }
+            return response.json();
+        })
+        .then(data => {
+            muniData = data;
+            
+            // 2. Udfyld dropdown-menuen
+            const select = document.getElementById('muni-select');
+            select.innerHTML = ''; // Ryd standard-værdien
+            
+            // Sorter kommunerne alfabetisk
+            const munis = Object.keys(data).sort();
+            munis.forEach(m => {
+                const option = document.createElement('option');
+                option.value = m;
+                option.textContent = m;
+                // Sæt København som standard, hvis den findes
+                if(m === 'København') option.selected = true;
+                select.appendChild(option);
+            });
+
+            // 3. Tegn grafen første gang siden loades
+            const initialMuni = select.value || munis[0];
+            updateDashboard(initialMuni);
+            
+            // 4. Lyt efter ændringer i dropdown-menuen
+            select.addEventListener('change', function(e) {
+                updateDashboard(e.target.value);
+            });
+        })
+        .catch(error => {
+            console.error("Fejl ved indlæsning af data:", error);
+            document.getElementById('kpi-price').textContent = "Fejl";
+        });
+
+    // Funktion der opdaterer tal og graf
+    function updateDashboard(muniName) {
+        const data = muniData[muniName];
+        if(!data) return;
+
+        // Opdater KPI-bokse til højre
+        document.getElementById('kpi-price').textContent = (data.price_pct > 0 ? '+' : '') + data.price_pct + '%';
+        document.getElementById('kpi-income').textContent = (data.income_pct > 0 ? '+' : '') + data.income_pct + '%';
+        document.getElementById('kpi-migration').textContent = (data.migration_pct > 0 ? '+' : '') + data.migration_pct + '%';
+
+        // Opdater Grafen i midten
+        const ctx = document.getElementById('explorerChart').getContext('2d');
+        
+        // Slet den gamle graf, hvis der allerede er tegnet en (så de ikke ligger oven i hinanden)
+        if (chartInstance) {
+            chartInstance.destroy(); 
+        }
+
+        // Tegn den nye graf
+        chartInstance = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: data.years,
+                datasets: [
+                    {
+                        label: 'Square meter price',
+                        data: data.price_idx,
+                        borderColor: '#008f68',
+                        borderWidth: 2,
+                        pointRadius: 0, // Fjerner prikkerne for et rent linje-look
+                        tension: 0.3  // Gør linjen let buet
+                    },
+                    {
+                        label: 'Income',
+                        data: data.income_idx,
+                        borderColor: '#005bb5',
+                        borderWidth: 2,
+                        pointRadius: 0,
+                        tension: 0.3
+                    },
+                    {
+                        label: 'Net migration',
+                        data: data.migration_idx,
+                        borderColor: '#e63946',
+                        borderWidth: 2,
+                        pointRadius: 0,
+                        tension: 0.3
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    }
+});
+</script>
 </body>
 </html>
