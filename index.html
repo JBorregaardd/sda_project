@@ -7,20 +7,22 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <style>
         /* Basic magazine-style styling */
+       /* Base page styling */
         body {
             font-family: 'Roboto', sans-serif;
             line-height: 1.6;
             margin: 0;
             padding: 0;
             color: #222;
-            background-color: #f9f9f9;
+            background-color: #e6f2fa; /* soft light blue background */
         }
 
+        /* Header styling */
         header {
-            background-color: #fff;
+            background-color: #ffffff;
             padding: 2rem;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
             text-align: center;
+            border-bottom: 1px solid #ddd;
         }
 
         header h1 {
@@ -33,43 +35,57 @@
             color: #555;
         }
 
+        /* Main container */
         main {
-            max-width: 1200px; /* increased width */
+            max-width: 1200px;
             margin: 2rem auto;
-            padding: 0 2rem; /* wider padding */
+            padding: 2rem;
+            background-color: #ffffff; /* white card */
+            border-radius: 10px;
         }
 
+        /* Sections */
         section {
             margin-bottom: 4rem;
+            padding: 2rem;
+            background-color: #ffffff;
+            border-radius: 8px;
         }
 
+        /* Section headings */
         h2 {
             font-size: 1.5rem;
-            margin-bottom: 1rem;
+            margin: 1rem 0;
             color: #111;
         }
 
+        /* Paragraph styling */
+        p {
+            margin: 0.5rem 0;
+        }
+
+        /* Plot images */
         img.plot {
             width: 100%;
             height: auto;
             display: block;
             margin: 2rem 0;
-            border-radius: 4px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            border-radius: 6px;
+            background-color: #ffffff;
+            padding: 0.5rem; 
+            box-shadow: none; /* removed shadow */
         }
 
-        p {
-            margin-bottom: 1rem;
-        }
-
-        /* Optional: pull-quote style for emphasis */
+        /* Quotes */
         .quote {
             font-style: italic;
             font-size: 1.1rem;
             color: #444;
-            margin: 2rem 0;
-            padding-left: 1rem;
+            margin: 1.5rem 0;
+            padding: 1rem 1.5rem;
             border-left: 4px solid #ff6f61;
+            background-color: #f0f8ff; /* soft pastel blue */
+            border-radius: 4px;
         }
 
         /* Flex container for municipal plots */
@@ -77,13 +93,128 @@
             display: flex;
             gap: 2rem;
             flex-wrap: wrap;
+            justify-content: center;
         }
 
         #municipal-level .flex-container > div {
-            flex: 1;
-            min-width: 400px; /* slightly bigger than before */
+            flex: 1 1 400px;
+            min-width: 400px;
         }
 
+        #municipal-level .flex-container img.plot {
+            width: 100%;
+            margin: 0 auto;
+            box-shadow: none; /* removed shadow for municipal plots too */
+        }
+
+        /* Map toggle buttons */
+        #municipal-maps button {
+            margin-right: 1rem;
+            padding: 0.5rem 1rem;
+            font-size: 1rem;
+            cursor: pointer;
+            border: 1px solid #ccc;
+            background-color: #ffffff;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+        }
+
+        #municipal-maps button:hover {
+            background-color: #d0e4f7;
+            border-color: #91c2eb;
+        }
+
+        /* Responsive container for Plotly iframes */
+        .map-container {
+            position: relative;
+            width: 100%;
+            height: 0;
+            padding-bottom: 80%;
+            margin-top: 1.5rem;
+            border-radius: 8px;
+            overflow: hidden;
+            background-color: #ffffff;
+        }
+
+        .map-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        /* Figcaption styling */
+        figcaption {
+            text-align: center;
+            font-size: 0.95rem;
+            margin-top: 0.5rem;
+            color: #555;
+        }
+
+        /* Explorer Grid System */
+        .explorer-grid {
+            display: grid;
+            grid-template-columns: 200px 1fr 200px;
+            gap: 20px;
+            margin-top: 2rem;
+        }
+
+        .sidebar {
+            background: #fff;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+        }
+
+        #muni-select {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+        }
+
+        .chart-container {
+            background: #fff;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+        }
+
+        .kpi-container {
+            background: #fff;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .kpi-card {
+            text-align: center;
+        }
+
+        .kpi-value {
+            font-size: 2rem;
+            font-weight: bold;
+        }
+
+        .kpi-label {
+            font-size: 0.85rem;
+            color: #555;
+            margin-top: 5px;
+        }
+
+        /* Mobile fallback */
+        @media (max-width: 900px) {
+            .explorer-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
     </style>
 </head>
 <body>
@@ -95,6 +226,7 @@
 
 <main>
 
+    <!-- Intro Section -->
     <section id="intro">
         <p>Lately, I often hear my peers talk about how the housing market—especially in big cities like Copenhagen—is becoming increasingly difficult for young people and first-time buyers. This concern is also reflected in the media, and it was one of the key topics in the recent 2025 municipal election<sup>1</sup>. Many feel that they do not have the same opportunities as their parents’ generation.</p>
 
@@ -103,28 +235,120 @@
         <p>The first step is to look at the overall development of housing prices compared to average incomes. The chart below illustrates how property prices have grown much faster than wages over the past three decades, highlighting the increasing challenge of affordability.</p>
     </section>
 
+    <!-- National Trend Section -->
     <section id="national-trend">
         <img src="output/price_income_trends.png" alt="Housing prices vs. average income over time" class="plot">
 
         <p class="quote">The time-series above shows that the housing market becoming less accessible is not just a feeling, but reflects a real trend. It tells a compelling story of the increasing gap between average housing prices and average incomes over the last 34 years. You can also clearly see the impact of the financial crisis: housing prices skyrocketed leading up to the 2008 boom, while incomes remained relatively stable during the same period. This visualization highlights both the long-term trend and the specific moments when the market experienced dramatic changes.</p>
     </section>
 
+    <!-- Municipal-Level Section -->
     <section id="municipal-level">
         <h2>From National Trends to Municipal Insights</h2>
         <p>This section explores how housing prices and affordability have evolved across individual municipalities, highlighting the extremes and differences between regions. The visualizations below show both the highest and lowest changes in square meter prices, as well as the impact on affordable living space for a standard 100 m² home.</p>
 
         <div class="flex-container">
             <div>
-                <img src="output/price_change_top_bottom.png" alt="Top and bottom municipalities by % price increase" class="plot">
+                <figure>
+                    <img src="output/price_change_top_bottom.png" alt="Top and bottom municipalities by % price increase" class="plot">
+                    <figcaption style="text-align:center; font-size:0.95rem; margin-top:0.5rem;">
+                        % m² price growth (1992–2024) – top vs bottom municipalities
+                    </figcaption>
+                </figure>
                 <p class="quote">[Insert analysis and commentary on top and bottom municipalities by % price increase here]</p>
             </div>
             <div>
-                <img src="output/sqm_change_top_bottom.png" alt="Change in affordable square meters for 100 m²" class="plot">
+                <figure>
+                    <img src="output/sqm_change_top_bottom.png" alt="Change in affordable square meters for 100 m²" class="plot">
+                    <figcaption style="text-align:center; font-size:0.95rem; margin-top:0.5rem;">
+                        Change in affordable square meters for a 100 m² home (1992–2024)
+                    </figcaption>
+                </figure>
                 <p class="quote">[Insert analysis and commentary on changes in affordable square meters here]</p>
             </div>
         </div>
     </section>
 
+    <!-- Municipal Maps Section -->
+    <section id="municipal-maps">
+        <h2>Municipal Maps</h2>
+
+        <!-- Buttons to toggle between maps -->
+        <div style="margin-bottom:1rem;">
+            <button onclick="showMap('price')">Square-Meter Price Change</button>
+            <button onclick="showMap('aff')">Affordability Change</button>
+            <button onclick="showMap('move')">Net Migration</button>
+        </div>
+
+        <!-- Square-Meter Price Change Map (default visible) -->
+        <div class="map-wrapper" id="map-price-wrapper" style="display:block;">
+            <iframe src="output/price_change.html" width="100%" height="900" style="border:none;"></iframe>
+        </div>
+
+        <!-- Affordability Map -->
+        <div class="map-wrapper" id="map-aff-wrapper" style="display:none;">
+            <iframe src="output/affordability.html" width="100%" height="900" style="border:none;"></iframe>
+        </div>
+
+        <!-- Net Migration Map -->
+        <div class="map-wrapper" id="map-move-wrapper" style="display:none;">
+            <iframe src="output/migration.html" width="100%" height="900" style="border:none;"></iframe>
+        </div>
+        <p class="quote">[Insert analysis and commentary on changes in affordable square meters here]</p>
+    </section>
+
+    <script>
+    function showMap(map) {
+        document.getElementById('map-price-wrapper').style.display = map === 'price' ? 'block' : 'none';
+        document.getElementById('map-aff-wrapper').style.display = map === 'aff' ? 'block' : 'none';
+        document.getElementById('map-move-wrapper').style.display = map === 'move' ? 'block' : 'none';
+    }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <section id="explorer" style="background-color: #f9fbff; border: 1px solid #e0e0e0;">
+        <h2>Explore a municipality</h2>
+        <p>Select any of Denmark's 97 municipalities and explore how housing prices, income, and net migration have changed from 1992 to 2024.</p>
+
+        <div class="explorer-grid">
+            <div class="sidebar">
+                <label for="muni-select" style="font-weight: bold; font-size: 0.9rem;">Municipality</label>
+                <select id="muni-select">
+                    <option value="København">København</option>
+                    </select>
+                <div style="margin-top: 1.5rem; display: flex; align-items: center; gap: 10px; color: #555;">
+                    <span style="font-size: 1.5rem;">🏛️</span>
+                    <span style="font-size: 0.85rem;">1 of 97 municipalities<br>in Denmark</span>
+                </div>
+            </div>
+
+            <div class="chart-container">
+                <div style="font-size: 0.85rem; font-weight: bold; margin-bottom: 10px;">Indexed change since 1992 (1992 = 100)</div>
+                <canvas id="explorerChart" height="250"></canvas>
+            </div>
+
+            <div class="kpi-container">
+                <div class="kpi-card">
+                    <div class="kpi-value" id="kpi-price" style="color: #008f68;">+0%</div>
+                    <div class="kpi-label">Square meter price</div>
+                </div>
+                <hr style="border: 0; border-top: 1px solid #eee; margin: 15px 0;">
+                <div class="kpi-card">
+                    <div class="kpi-value" id="kpi-income" style="color: #005bb5;">+0%</div>
+                    <div class="kpi-label">Income</div>
+                </div>
+                <hr style="border: 0; border-top: 1px solid #eee; margin: 15px 0;">
+                <div class="kpi-card">
+                    <div class="kpi-value" id="kpi-migration" style="color: #e63946;">-0%</div>
+                    <div class="kpi-label">Net migration</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+    <!-- References -->
     <section id="references">
         <h2>References</h2>
         <ol>
@@ -134,8 +358,10 @@
             <li>Statistics Denmark (Danmarks Statistik). (2025). <i>BM010: Huspriser og omkostninger ved boligkøb</i>. Accessed May 10, 2026, from <a href="https://rkr.statistikbank.dk/BM010" target="_blank">Link</a></li>
         </ol>
     </section>
-
+    
 </main>
+
+
 
 </body>
 </html>
